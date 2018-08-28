@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ReclamosOnline</string>
+    <string name="title_activity_maps">Mapa de Reclamos</string>
+    <string name="tvReclamo">Describa el reclamo</string>
+    <string name="tvMail">Correo electronico de contacto</string>
+    <string name="btnTomarFoto">Subir Foto</string>
+    <string name="btnReclamar">Hacer Reclamo</string>
+    <string name="btnCancelar">Cancelar</string>
+
+</resources>
