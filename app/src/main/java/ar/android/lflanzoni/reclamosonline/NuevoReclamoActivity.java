@@ -22,12 +22,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import ar.android.lflanzoni.reclamosonline.modelo.Reclamo;
+import ar.android.lflanzoni.reclamosonline.modelo.ReclamoDAO;
+import ar.android.lflanzoni.reclamosonline.modelo.ReclamoDAOsql;
 
 public class NuevoReclamoActivity extends AppCompatActivity {
     Button btnTomarFoto,btnCancelar,btnHacerReclamo;
     ImageView imgFoto;
     Reclamo reclamo;
     EditText etMail,etDescripcion;
+    ReclamoDAO reclamoDAO;
     private static final int REQUEST_IMAGE_CAPTURE = 888;
 
     @Override
@@ -41,7 +44,10 @@ public class NuevoReclamoActivity extends AppCompatActivity {
         etDescripcion = (EditText) findViewById(R.id.etDescripcion);
         etMail = (EditText) findViewById(R.id.etMail);
         reclamo = new Reclamo();
+        //Persistencia utilizando sql
+        reclamoDAO = new ReclamoDAOsql(this);
         reclamo.setUbicacion((LatLng)getIntent().getParcelableExtra("punto"));
+
 
 
 
@@ -73,7 +79,10 @@ public class NuevoReclamoActivity extends AppCompatActivity {
                         Intent(NuevoReclamoActivity.this,MapsActivity.class);
                 reclamo.setMailContacto(etMail.getText().toString());
                 reclamo.setDescripcion(etDescripcion.getText().toString());
-                Log.d("MALDITO",reclamo.toString());
+                //EDITAR RECLAMO O AGREGAR
+                if(reclamo.getId()!=0){
+                    reclamoDAO.actualizar(reclamo);
+                }else{reclamoDAO.agregar(reclamo);}
                 String dato = reclamo.toJson().toString();
                 returnIntent.putExtra("result",dato);
                 setResult(Activity.RESULT_OK,returnIntent);

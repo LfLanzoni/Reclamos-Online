@@ -19,7 +19,7 @@ public class Reclamo {
     private String pathImagen;
 
     public Reclamo() {
-        this.id = ++ID_GEN;
+        this.id = ID_GEN;
         resuelto=false;
     }
 
@@ -118,16 +118,14 @@ public class Reclamo {
         return Objects.hash(id);
     }
 
+
+
     @Override
     public String toString() {
-        return "Reclamo{" +
-                "id=" + id +
-                ", descripcion='" + descripcion + '\'' +
-                ", ubicacion=" + ubicacion +
-                ", resuelto=" + resuelto +
-                ", mailContacto='" + mailContacto + '\'' +
-                ", pathImagen='" + pathImagen + '\'' +
-                '}';
+        return "Mail de Contacto='" + mailContacto + '\'' +
+                ", Descripcion='" + descripcion + '\'' +
+                ", Ubicacion=" + ubicacion +
+                ", Estado =" + resuelto;
     }
 }
 
