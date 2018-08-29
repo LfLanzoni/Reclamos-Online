@@ -24,12 +24,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ar.android.lflanzoni.reclamosonline.modelo.Reclamo;
+import ar.android.lflanzoni.reclamosonline.modelo.ReclamoDAO;
+import ar.android.lflanzoni.reclamosonline.modelo.ReclamoDAOsql;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int REQUEST_CREAR_RECLAMO = 777 ;
     private GoogleMap mMap;
-
+    private ReclamoDAO reclamoDAO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +40,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
+        reclamoDAO = new ReclamoDAOsql(this);
+        //VER DE CARGAR LOS MARKER EN EL MAPA
+        // RECORDA EN CAMBIO DE ESTADO CAMBIA EL MARKER DESDE LISTA RECLAMO
     }
 
     @Override
@@ -64,8 +67,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 r.loadFromJson(new JSONObject(reclamoJson));
             } catch (JSONException e) {
                 e.printStackTrace();
-            }//REVER
-            //Log.d("LAB_RECLAMO",r.toString());
+            };
             float color = r.getResuelto()?
                     BitmapDescriptorFactory.HUE_BLUE:BitmapDescriptorFactory.HUE_RED;
                     mMap.addMarker(new MarkerOptions()
@@ -94,6 +96,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
+        //LOAD DE RECLAMOS
+        cargarReclamos();
+
+        //LLENAR MAPA DE MARKER CON RECLAMOS CARGADOS DE LA DB
+
+
+
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -112,10 +121,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         switch (item.getItemId()) {
             case R.id.menuListaReclamos:
                 Toast.makeText(this,"MENU SELECCIONADO ",Toast.LENGTH_LONG).show();
+                Intent intentListaReclamos = new Intent(this,ListaReclamosActivity.class);
+                startActivity(intentListaReclamos);
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
 
+    }
+
+    public void cargarReclamos(){
+        float color ;
+        for (Reclamo reclamo:reclamoDAO.listarReclamos()) {
+            color = reclamo.getResuelto()?
+                    BitmapDescriptorFactory.HUE_BLUE:BitmapDescriptorFactory.HUE_RED;
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(reclamo.getUbicacion().latitude,reclamo.getUbicacion().longitude))
+                    .title(reclamo.getMailContacto())
+                    .snippet(reclamo.getDescripcion())
+                    .icon(BitmapDescriptorFactory.defaultMarker(color)));
+        }
     }
 }
