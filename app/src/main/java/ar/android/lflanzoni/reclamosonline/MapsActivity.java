@@ -29,7 +29,7 @@ import ar.android.lflanzoni.reclamosonline.modelo.ReclamoDAOsql;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final int REQUEST_CREAR_RECLAMO = 777 ;
+    private static final int REQUEST_CREAR_RECLAMO = 777 ,REQUEST_ACTUALIZAR_MAPA=778;
     private GoogleMap mMap;
     private ReclamoDAO reclamoDAO;
     @Override
@@ -76,17 +76,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .snippet(r.getDescripcion())
                     .icon(BitmapDescriptorFactory.defaultMarker(color)));
         }
+        if(requestCode == REQUEST_ACTUALIZAR_MAPA && resultCode == RESULT_OK){
+            cargarReclamos();
+        }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -122,7 +116,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.menuListaReclamos:
                 Toast.makeText(this,"MENU SELECCIONADO ",Toast.LENGTH_LONG).show();
                 Intent intentListaReclamos = new Intent(this,ListaReclamosActivity.class);
-                startActivity(intentListaReclamos);
+                startActivityForResult(intentListaReclamos,REQUEST_ACTUALIZAR_MAPA);
                 return true;
             default:
                 return super.onContextItemSelected(item);

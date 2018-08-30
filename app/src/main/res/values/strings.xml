@@ -6,5 +6,6 @@
     <string name="btnTomarFoto">Subir Foto</string>
     <string name="btnReclamar">Hacer Reclamo</string>
     <string name="btnCancelar">Cancelar</string>
-
+    <string name="btnVerMapa">Volver al Mapa</string>
+    <string name="cbEstado">Resuelto :</string>
 </resources>
